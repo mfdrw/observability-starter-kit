@@ -1,6 +1,5 @@
-def main():
-    print("Hello from demo-app!")
+"""Entry point for the demo application."""
 
+from app.main import app
 
-if __name__ == "__main__":
-    main()
+__all__ = ["app"]
