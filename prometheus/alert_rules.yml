@@ -1,0 +1,50 @@
+groups:
+  - name: demo_app.rules
+    rules:
+      - alert: HighErrorRate
+        expr: |
+          (
+            sum(rate(http_errors_total{job="demo_app"}[5m])) by (instance)
+            /
+            sum(rate(http_requests_total{job="demo_app"}[5m])) by (instance)
+          ) > 0.1
+        for: 2m
+        labels:
+          severity: warning
+          service: demo_app
+        annotations:
+          summary: "High error rate detected on demo app"
+          description: "Error rate is {{ $value | humanizePercentage }} on instance {{ $labels.instance }}"
+
+      - alert: DemoAppDown
+        expr: up{job="demo_app"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          service: demo_app
+        annotations:
+          summary: "Demo app is down"
+          description: "Demo app instance {{ $labels.instance }} has been down for more than 1 minute"
+
+      - alert: HighRequestLatency
+        expr: |
+          histogram_quantile(0.95, 
+            sum(rate(http_request_duration_seconds_bucket{job="demo_app"}[5m])) by (le, instance)
+          ) > 0.5
+        for: 5m
+        labels:
+          severity: warning
+          service: demo_app
+        annotations:
+          summary: "High request latency on demo app"
+          description: "95th percentile latency is {{ $value }}s on instance {{ $labels.instance }}"
+
+      - alert: ErrorEndpointHit
+        expr: increase(http_errors_total{job="demo_app", endpoint="/error"}[1m]) > 0
+        for: 0m
+        labels:
+          severity: info
+          service: demo_app
+        annotations:
+          summary: "Error endpoint was hit"
+          description: "The /error endpoint was hit {{ $value }} times in the last minute on instance {{ $labels.instance }}" 
