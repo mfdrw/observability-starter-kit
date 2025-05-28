@@ -57,6 +57,13 @@ services:
     depends_on:
       - prometheus
 
+  traffic_generator:
+    build: ./traffic_generator
+    networks:
+      - observability
+    depends_on:
+      - demo_app
+
 networks:
   observability:
     driver: bridge 
