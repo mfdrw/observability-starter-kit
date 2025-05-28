@@ -25,13 +25,9 @@ receivers:
   - name: 'critical-alerts'
     email_configs:
       - to: 'admin@example.org'
-        subject: 'CRITICAL: {{ .GroupLabels.alertname }}'
-        html: |
-          <h2>Critical Alert</h2>
-          {{ range .Alerts }}
-          <p><strong>Alert:</strong> {{ .Annotations.summary }}</p>
-          <p><strong>Description:</strong> {{ .Annotations.description }}</p>
-          {{ end }}
+        from: 'alertmanager@example.org'
+        headers:
+          Subject: 'CRITICAL Alert: {{ .GroupLabels.alertname }}'
     slack_configs:
       - api_url: 'https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK'
         channel: '#alerts-critical'
@@ -41,13 +37,9 @@ receivers:
   - name: 'warning-alerts'
     email_configs:
       - to: 'team@example.org'
-        subject: 'WARNING: {{ .GroupLabels.alertname }}'
-        html: |
-          <h2>Warning Alert</h2>
-          {{ range .Alerts }}
-          <p><strong>Alert:</strong> {{ .Annotations.summary }}</p>
-          <p><strong>Description:</strong> {{ .Annotations.description }}</p>
-          {{ end }}
+        from: 'alertmanager@example.org'
+        headers:
+          Subject: 'WARNING Alert: {{ .GroupLabels.alertname }}'
     slack_configs:
       - api_url: 'https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK'
         channel: '#alerts-warning'
