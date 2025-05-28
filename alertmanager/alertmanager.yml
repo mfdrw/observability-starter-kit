@@ -26,10 +26,11 @@ receivers:
     email_configs:
       - to: 'admin@example.org'
         subject: 'CRITICAL: {{ .GroupLabels.alertname }}'
-        body: |
+        html: |
+          <h2>Critical Alert</h2>
           {{ range .Alerts }}
-          Alert: {{ .Annotations.summary }}
-          Description: {{ .Annotations.description }}
+          <p><strong>Alert:</strong> {{ .Annotations.summary }}</p>
+          <p><strong>Description:</strong> {{ .Annotations.description }}</p>
           {{ end }}
     slack_configs:
       - api_url: 'https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK'
@@ -41,10 +42,11 @@ receivers:
     email_configs:
       - to: 'team@example.org'
         subject: 'WARNING: {{ .GroupLabels.alertname }}'
-        body: |
+        html: |
+          <h2>Warning Alert</h2>
           {{ range .Alerts }}
-          Alert: {{ .Annotations.summary }}
-          Description: {{ .Annotations.description }}
+          <p><strong>Alert:</strong> {{ .Annotations.summary }}</p>
+          <p><strong>Description:</strong> {{ .Annotations.description }}</p>
           {{ end }}
     slack_configs:
       - api_url: 'https://hooks.slack.com/services/YOUR/SLACK/WEBHOOK'
